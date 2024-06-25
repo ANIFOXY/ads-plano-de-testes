@@ -1,39 +1,34 @@
-const Pessoa = require('../models/pessoa.js');
+const { Pessoa } = require('../models');
+const sequelize = require('../config/database');
 
-class RepositorioExercicio {
+class PessoaRepository {
+  async Adicionar(pessoa) {
+    return Pessoa.create(pessoa);
+  }
 
-    async PegarUm(id){
-        return Pessoa.findOne({
-            where: {
-                id
-            }
-        })
-    }
+  async PegarTodos() {
+    return Pessoa.findAll();
+  }
 
-    async PegarTodos(){
-        return Pessoa.findAll()
-    }
+  async PegarPorId(id) {
+    return Pessoa.findByPk(id);
+  }
 
-    async Adicionar(pessoa){
-        return Pessoa.create({ ...pessoa})
-    }
+  async Alterar(id, pessoa) {
+    return Pessoa.update(pessoa, {
+      where: {
+        id,
+      },
+    });
+  }
 
-    async Alterar(id, pessoa){
-        return Pessoa.update(pessoa, {
-            where: {
-                id
-            }
-        })
-    }
-
-    async Deletar(id){
-        return Pessoa.destroy({
-            where: {
-                id
-            }
-        })
-    }
-
+  async Deletar(id) {
+    return Pessoa.destroy({
+      where: {
+        id,
+      },
+    });
+  }
 }
 
-module.exports = RepositorioExercicio
+module.exports = new PessoaRepository();

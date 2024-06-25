@@ -1,48 +1,49 @@
-const RepositorioExercicio= require("../repositories/pessoa.js")
+const pessoaRepository = require('../repositories/pessoa');
 
-const repositorio = new RepositorioExercicio()
-class ServicoExercicio {
-
-    async PegarUm(id){
-      if(!id || isNaN(id)) {
-        throw new Error("Favor corretamente o id.")
-      }
-      return repositorio.PegarUm(id)
+class PessoaService {
+  async Adicionar(pessoa) {
+    const t = await sequelize.transaction();
+    try {
+      const novaPessoa = await pessoaRepository.Adicionar(pessoa, { transaction: t });
+      await t.commit();
+      return novaPessoa;
+    } catch (error) {
+      await t.rollback();
+      throw error;
     }
+  }
 
-    async PegarTodos(){
-      return repositorio.PegarTodos()
+  async PegarTodos() {
+    return pessoaRepository.PegarTodos();
+  }
+
+  async PegarPorId(id) {
+    return pessoaRepository.PegarPorId(id);
+  }
+
+  async Alterar(id, pessoa) {
+    const t = await sequelize.transaction();
+    try {
+      const pessoaAlterada = await pessoaRepository.Alterar(id, pessoa, { transaction: t });
+      await t.commit();
+      return pessoaAlterada;
+    } catch (error) {
+      await t.rollback();
+      throw error;
     }
+  }
 
-    async Adicionar(pessoa){
-      if(!pessoa) {
-        throw new Error("Favor preencher o pessoa.")
-      } else if(!pessoa.nome) {
-        throw new Error("Favor preencher o nome.")
-      } else if(!pessoa.email) {
-        throw new Error("Favor preencher o email.")
-      } else if(!pessoa.senha) {
-        throw new Error("Favor preencher o senha.")
-      }
-
-      return repositorio.Adicionar(pessoa)
+  async Deletar(id) {
+    const t = await sequelize.transaction();
+    try {
+      const resultado = await pessoaRepository.Deletar(id, { transaction: t });
+      await t.commit();
+      return resultado;
+    } catch (error) {
+      await t.rollback();
+      throw error;
     }
-
-    async Alterar(id, pessoa){
-      if(!id || isNaN(id)) {
-        throw new Error("Favor corretamente o id.")
-      }
-
-      return repositorio.Adicionar(pessoa)
-    }
-
-    async Deletar(id){
-      if(!id || isNaN(id)) {
-        throw new Error("Favor corretamente o id.")
-      }
-
-      return repositorio.Deletar(id)
-    }
-
+  }
 }
-module.exports = ServicoExercicio
+
+module.exports = new PessoaService();

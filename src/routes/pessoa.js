@@ -1,14 +1,13 @@
-const express = require("express");
-const ControllerExercicio = require("../controllers/pessoa.js");
+const express = require('express');
+const ControllerPessoa = require('../controllers/pessoa.js');
 
 const router = express.Router();
+const controllerPessoa = new ControllerPessoa();
 
-const controllers = new ControllerExercicio()
-
-router.get("/api/pessoas/", controllers.PegarTodos);
-router.get("/api/pessoa/:id", controllers.PegarUm);
-router.post("/api/pessoa", controllers.Adicionar);
-router.put("/api/pessoa/:id", controllers.Alterar);
-router.delete("/api/pessoa/:id", controllers.Deletar);
+router.get('/api/pessoas', controllerPessoa.PegarTodos);
+router.get('/api/pessoa/:id', controllerPessoa.PegarUm);
+router.post('/api/pessoa', controllerPessoa.Adicionar);
+router.put('/api/pessoa/:id', controllerPessoa.Alterar);
+router.delete('/api/pessoa/:id', controllerPessoa.Deletar);
 
 module.exports = router;
